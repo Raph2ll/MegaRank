@@ -30,9 +30,10 @@ namespace api.Data
 
                 foreach (var entityMap in _entityMaps)
                 {
-                    entityMap.Configure();
+                    entityMap.Configure(connection);
                 }
             }
         }
+
     }
 }

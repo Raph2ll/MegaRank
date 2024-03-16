@@ -1,45 +1,33 @@
-using System.Data;
 using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace api.Mappings
 {
     public class UserMap : IEntityMap
     {
-        private readonly string connectionString;
-
-        public UserMap(string connectionString)
+        public void Configure(MySqlConnection connection)
         {
-            this.connectionString = connectionString;
-        }
-
-        public void Configure()
-        {
-            using (var connection = new MySqlConnection(connectionString))
+            using (var cmd = connection.CreateCommand())
             {
-                connection.Open();
+                // connection.Open();
 
-                string createTableQuery = @"
-                CREATE TABLE IF NOT EXISTS User (
-                    Id INT AUTO_INCREMENT PRIMARY KEY,
-                    Name VARCHAR(80) NOT NULL,
-                    Email VARCHAR(160) NOT NULL,
-                    PasswordHash VARCHAR(255) NOT NULL,
-                    Slug VARCHAR(80) NOT NULL,
-                    UNIQUE (Slug)
-                )";
+                cmd.CommandText = $"CREATE DATABASE IF NOT EXISTS MegaRank";
+                cmd.ExecuteNonQuery();
 
-                using (var command = new MySqlCommand(createTableQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
+                cmd.CommandText = $"USE MegaRank";
+                cmd.ExecuteNonQuery();
 
-                string createIndexQuery = "CREATE UNIQUE INDEX IF NOT EXISTS IX_User_Slug ON User (Slug)";
-                using (var command = new MySqlCommand(createIndexQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
+                cmd.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS User (
+                        Id INT AUTO_INCREMENT PRIMARY KEY,
+                        Name VARCHAR(80) NOT NULL,
+                        Email VARCHAR(160) NOT NULL,
+                        PasswordHash VARCHAR(255) NOT NULL,
+                        Slug VARCHAR(80) NOT NULL,
+                        UNIQUE (Slug)
+                    );";
+                cmd.ExecuteNonQuery();
             }
         }
     }
-
 }
