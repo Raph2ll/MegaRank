@@ -22,8 +22,9 @@ namespace api.Mappings
                         Id INT AUTO_INCREMENT PRIMARY KEY,
                         Name VARCHAR(80) NOT NULL,
                         Email VARCHAR(160) NOT NULL,
-                        PasswordHash VARCHAR(255) NOT NULL,
                         Slug VARCHAR(80) NOT NULL,
+                        RolesId INT NOT NULL,
+                        PasswordHash VARCHAR(255) NOT NULL,
                         UNIQUE (Slug)
                     );";
                 cmd.ExecuteNonQuery();
