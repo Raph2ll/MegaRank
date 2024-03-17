@@ -120,7 +120,7 @@ namespace api.Data.Repositories
                 using (var command = new MySqlCommand("DELETE FROM MegaRank.User WHERE Id = @userId",
                     dbConnection))
                 {
-                    command.Parameters.AddWithValue("@ProductId", userId);
+                    command.Parameters.AddWithValue("@userId", userId);
                     command.ExecuteNonQuery();
                 }
             }
