@@ -21,13 +21,14 @@ namespace api.Data.Repositories
             using (var dbConnection = _connection.GetConnection())
             {
                 dbConnection.Open();
-                using (var cmd = new MySqlCommand("INSERT INTO User (Name, Email, PasswordHash, Slug) VALUES (@Name, @Email, @PasswordHash, @Slug)",
+                using (var cmd = new MySqlCommand("INSERT INTO User (Name, Email,Slug,RolesId,PasswordHash, ) VALUES (@Name, @Email, @Slug, @RolesId, @PasswordHash)",
                     dbConnection))
                 {
                     cmd.Parameters.AddWithValue("@Name", user.Name);
                     cmd.Parameters.AddWithValue("@Email", user.Email);
-                    cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
                     cmd.Parameters.AddWithValue("@Slug", user.Slug);
+                    cmd.Parameters.AddWithValue("@RolesId", user.RolesId);
+                    cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -40,7 +41,7 @@ namespace api.Data.Repositories
             using (var dbConnection = _connection.GetConnection())
             {
                 dbConnection.Open();
-                using (var command = new MySqlCommand($"SELECT Name, Email, PasswordHash, Slug FROM MegaRank.User",
+                using (var command = new MySqlCommand($"SELECT Id, Name, Email FROM MegaRank.User",
                     dbConnection))
                 {
                     using (var reader = command.ExecuteReader())
