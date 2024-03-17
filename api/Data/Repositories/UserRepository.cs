@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace api.Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext _connection;
 
