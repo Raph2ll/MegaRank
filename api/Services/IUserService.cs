@@ -1,12 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using api.Models;
 
 namespace api.Services
 {
     public interface IUserService
     {
-        
+        void AddUser(User user);
+        List<User> GetAllUser();
+        User GetUserById(int id);
+        void Update(User updatedUser);
+        void Delete(int userId);
     }
 }
