@@ -6,9 +6,9 @@ namespace api.Services
     public interface IUserService
     {
         void AddUser(User user);
-        List<User> GetAllUser();
+        List<User> GetAllUsers();
         User GetUserById(int id);
-        void Update(User updatedUser);
-        void Delete(int userId);
+        void UpdateUser(User updatedUser);
+        void DeleteUser(int userId);
     }
 }
