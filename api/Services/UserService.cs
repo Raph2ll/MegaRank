@@ -27,7 +27,10 @@ namespace api.Services
         {
             return _userRepository.GetUserById(id);
         }
-
+        public User GetUserByName(string name)
+        {
+            return _userRepository.GetUserByName(name);
+        }
         public void UpdateUser(User updatedUser)
         {
             _userRepository.Update(updatedUser);

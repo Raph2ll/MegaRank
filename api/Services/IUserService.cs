@@ -8,6 +8,7 @@ namespace api.Services
         void AddUser(User user);
         List<User> GetAllUsers();
         User GetUserById(int id);
+        User GetUserByName(string name);
         void UpdateUser(User updatedUser);
         void DeleteUser(int userId);
     }
