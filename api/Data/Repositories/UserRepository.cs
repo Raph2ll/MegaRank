@@ -26,9 +26,8 @@ namespace api.Data.Repositories
                 {
                     cmd.Parameters.AddWithValue("@Name", user.Name);
                     cmd.Parameters.AddWithValue("@Email", user.Email);
-                    cmd.Parameters.AddWithValue("@Slug", user.Slug);
-                    cmd.Parameters.AddWithValue("@RolesId", user.RolesId);
-                    cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
+                    cmd.Parameters.AddWithValue("@RoleId", user.RoleId);
+                    cmd.Parameters.AddWithValue("@PasswordHash", user.Password);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -69,7 +68,7 @@ namespace api.Data.Repositories
             using (var dbConnection = _connection.GetConnection())
             {
                 dbConnection.Open();
-                using (var command = new MySqlCommand("SELECT Name, Email,Slug,RolesId,PasswordHash FROM MegaRank.User WHERE Id = @Id",
+                using (var command = new MySqlCommand("SELECT Name, Email,RoleId,PasswordHash FROM MegaRank.User WHERE Id = @Id",
                     dbConnection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -84,9 +83,8 @@ namespace api.Data.Repositories
                                 Id = Convert.ToInt32(reader["Id"]),
                                 Name = Convert.ToString(reader["Name"]),
                                 Email = Convert.ToString(reader["Email"]),
-                                Slug = Convert.ToString(reader["Slug"]),
-                                RolesId = Convert.ToInt32(reader["RolesId"]),
-                                PasswordHash = Convert.ToString(reader["PasswordHash"])
+                                RoleId = Convert.ToInt32(reader["RoleId"]),
+                                Password = Convert.ToString(reader["Password"])
                             };
                         }
                     }
@@ -95,6 +93,70 @@ namespace api.Data.Repositories
 
             return null;
 
+        }
+        public User GetUserByName(string name)
+        {
+            using (var dbConnection = _connection.GetConnection())
+            {
+                dbConnection.Open();
+                using (var command = new MySqlCommand("SELECT Name, Email FROM MegaRank.User WHERE Name = @Name",
+                    dbConnection))
+                {
+                    command.Parameters.AddWithValue("@Name", name);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new User
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Name = Convert.ToString(reader["Name"]),
+                                Email = Convert.ToString(reader["Email"])
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+
+        }
+        public List<User> GetByOrderDesc(int quantity)
+        {
+            var users = new List<User>();
+
+            using (var dbConnection = _connection.GetConnection())
+            {
+                dbConnection.Open();
+                using (var command = new MySqlCommand(
+                    @"SELECT Id, Name, Email
+                    FROM (
+                        SELECT *
+                        FROM MegaRank.User
+                        ORDER BY Id DESC
+                        LIMIT @Quantity
+                    ) AS subquery
+                    ORDER BY Id ASC;", dbConnection))
+                {
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var user = new User
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Name = reader["Name"].ToString(),
+                                Email = reader["Email"].ToString()
+                            };
+                            users.Add(user);
+                        }
+                    }
+                }
+            }
+
+            return users;
         }
         public void Update(User updatedUser)
         {

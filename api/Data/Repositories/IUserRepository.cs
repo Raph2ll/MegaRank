@@ -7,6 +7,7 @@ namespace api.Data.Repositories
         void AddUser(User user);
         List<User> GetAllUser();
         User GetUserById(int id);
+        User GetUserByName(string name);
         void Update(User updatedUser);
         void Delete(int userId);
     }
