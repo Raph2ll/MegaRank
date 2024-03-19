@@ -68,7 +68,7 @@ namespace api.Data.Repositories
             using (var dbConnection = _connection.GetConnection())
             {
                 dbConnection.Open();
-                using (var command = new MySqlCommand("SELECT Name, Email,RoleId,PasswordHash FROM MegaRank.User WHERE Id = @Id",
+                using (var command = new MySqlCommand("SELECT Name, Email,RoleId,Password FROM MegaRank.User WHERE Id = @Id",
                     dbConnection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -99,7 +99,7 @@ namespace api.Data.Repositories
             using (var dbConnection = _connection.GetConnection())
             {
                 dbConnection.Open();
-                using (var command = new MySqlCommand("SELECT Name, Email FROM MegaRank.User WHERE Name = @Name",
+                using (var command = new MySqlCommand("SELECT Name, Email, RoleId, Password FROM MegaRank.User WHERE Name = @Name",
                     dbConnection))
                 {
                     command.Parameters.AddWithValue("@Name", name);
@@ -112,7 +112,9 @@ namespace api.Data.Repositories
                             {
                                 Id = Convert.ToInt32(reader["Id"]),
                                 Name = Convert.ToString(reader["Name"]),
-                                Email = Convert.ToString(reader["Email"])
+                                Email = Convert.ToString(reader["Email"]),
+                                RoleId = Convert.ToInt32(reader["RoleId"]),
+                                Password = Convert.ToString(reader["Password"])
                             };
                         }
                     }
