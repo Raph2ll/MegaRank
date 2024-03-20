@@ -14,10 +14,6 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
-                });
                 webBuilder.UseStartup<Startup>();
             });
 }
