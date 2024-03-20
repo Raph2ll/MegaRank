@@ -99,7 +99,7 @@ namespace api.Data.Repositories
             using (var dbConnection = _connection.GetConnection())
             {
                 dbConnection.Open();
-                using (var command = new MySqlCommand("SELECT Name, Email, RoleId, Password FROM MegaRank.User WHERE Name = @Name",
+                using (var command = new MySqlCommand("SELECT Id, Email, RoleId, Password FROM MegaRank.User WHERE Name = @Name",
                     dbConnection))
                 {
                     command.Parameters.AddWithValue("@Name", name);
@@ -108,12 +108,16 @@ namespace api.Data.Repositories
                     {
                         if (reader.Read())
                         {
+                            int roleId = Convert.ToInt32(reader["RoleId"]);
+
+                            string roleName = GetRoleNameById(roleId);
+
                             return new User
                             {
                                 Id = Convert.ToInt32(reader["Id"]),
-                                Name = Convert.ToString(reader["Name"]),
+                                Name = name,
                                 Email = Convert.ToString(reader["Email"]),
-                                RoleId = Convert.ToInt32(reader["RoleId"]),
+                                Role = roleName,
                                 Password = Convert.ToString(reader["Password"])
                             };
                         }
@@ -122,7 +126,27 @@ namespace api.Data.Repositories
             }
 
             return null;
+        }
+        private string GetRoleNameById(int roleId)
+        {
+            using (var dbConnection = _connection.GetConnection())
+            {
+                dbConnection.Open();
+                using (var command = new MySqlCommand("SELECT Name FROM MegaRank.Role WHERE Id = @RoleId",
+                    dbConnection))
+                {
+                    command.Parameters.AddWithValue("@RoleId", roleId);
 
+                    object result = command.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        return Convert.ToString(result);
+                    }
+                }
+            }
+
+            return null;
         }
         public List<User> GetByOrderDesc(int quantity)
         {

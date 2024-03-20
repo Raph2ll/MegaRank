@@ -10,7 +10,7 @@ namespace api.Mappings
             using (var cmd = connection.CreateCommand())
             {
                 cmd.CommandText = @"
-                    SELECT COUNT(*) FROM Role WHERE Name = @roleName";
+                    SELECT COUNT(*) FROM Roles WHERE Name = @roleName";
                 cmd.Parameters.AddWithValue("@roleName", roleName);
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
                 return count > 0;
@@ -29,7 +29,7 @@ namespace api.Mappings
                 cmd.ExecuteNonQuery();
 
                 cmd.CommandText = @"
-                    CREATE TABLE IF NOT EXISTS Role (
+                    CREATE TABLE IF NOT EXISTS Roles (
                         Id INT AUTO_INCREMENT PRIMARY KEY,
                         Name VARCHAR(128) NOT NULL
                     );";
@@ -38,14 +38,14 @@ namespace api.Mappings
                 if (!RoleExists(connection, "user"))
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Role (Name) VALUES ('user')";
+                        INSERT INTO Roles (Name) VALUES ('user')";
                     cmd.ExecuteNonQuery();
                 }
 
                 if (!RoleExists(connection, "admin"))
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Role (Name) VALUES ('admin')";
+                        INSERT INTO Roles (Name) VALUES ('admin')";
                     cmd.ExecuteNonQuery();
                 }
             }

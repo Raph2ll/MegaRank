@@ -22,11 +22,9 @@ namespace api.Mappings
                         Id INT AUTO_INCREMENT PRIMARY KEY,
                         Name VARCHAR(80) NOT NULL,
                         Email VARCHAR(160) NOT NULL,
-                        Slug VARCHAR(80) NOT NULL,
-                        PasswordHash VARCHAR(255) NOT NULL,
+                        Password VARCHAR(255) NOT NULL,
                         RoleId INT NOT NULL,
                         FOREIGN KEY (RoleId) REFERENCES Roles(Id)
-                        UNIQUE (Slug)
                     );";
                 cmd.ExecuteNonQuery();
             }
